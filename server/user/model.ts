@@ -12,6 +12,9 @@ export type User = {
   username: string;
   password: string;
   dateJoined: Date;
+  verified: boolean;
+  name: string;
+  age: string;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -31,6 +34,21 @@ const UserSchema = new Schema({
   // The date the user joined
   dateJoined: {
     type: Date,
+    required: true
+  },
+  // The verification status of the user (true is verified, false is unverified)
+  verified: {
+    type: Boolean,
+    required: true
+  },
+  // The name of the user
+  name: {
+    type: String,
+    required: true
+  },
+  // The age of the user
+  age: {
+    type: String,
     required: true
   }
 });

@@ -7,6 +7,9 @@ type UserResponse = {
   _id: string;
   username: string;
   dateJoined: string;
+  verified: string;
+  name: string;
+  age: string;
 };
 
 /**
@@ -32,10 +35,20 @@ const constructUserResponse = (user: HydratedDocument<User>): UserResponse => {
     })
   };
   delete userCopy.password;
+  let status;
+  if (userCopy.verified) {
+    status = 'true';
+  } else {
+    status = 'false';
+  }
+
   return {
     ...userCopy,
     _id: userCopy._id.toString(),
-    dateJoined: formatDate(user.dateJoined)
+    dateJoined: formatDate(user.dateJoined),
+    verified: status,
+    name: userCopy.name,
+    age: userCopy.age
   };
 };
 

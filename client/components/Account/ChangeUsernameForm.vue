@@ -12,6 +12,7 @@ export default {
       method: 'PATCH',
       hasBody: true,
       setUsername: true,
+      setStatus: true,
       fields: [
         {id: 'username', label: 'Username', value: ''}
       ],

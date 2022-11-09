@@ -11,6 +11,18 @@
       </h1>
     </div>
     <div class="right">
+      <router-link
+        v-if="$store.state.username && $store.state.verified" 
+        to="/verified"
+      >
+        Verification
+      </router-link>
+      <router-link
+        v-else-if="$store.state.username && !$store.state.verified" 
+        to="/verification"
+      >
+        Verification
+      </router-link>
       <router-link to="/">
         Home
       </router-link>

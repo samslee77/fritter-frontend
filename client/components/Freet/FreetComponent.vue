@@ -61,6 +61,12 @@
         <p>{{ alert }}</p>
       </article>
     </section>
+    <div id="like">
+      <button @click="like">👍 {{freet.likes}} </button>
+    </div>
+    <div id="dislike">
+      <button @click="dislike">👎 {{freet.dislikes}} </button>
+    </div>
   </article>
 </template>
 
@@ -161,6 +167,43 @@ export default {
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
+    },
+    async like() {
+      const options = {
+        method: 'POST', headers: {'Content-Type': 'application/json'}
+      };
+      options.body = JSON.stringify({'id': this.freet._id}); 
+      await fetch(`/api/reactions/like`, options)
+        .then(async (response) => {
+          if (!response.ok) {
+            if (this.$store.username !== null) {
+              const options = {
+                method: 'DELETE', headers: {'Content-Type': 'application/json'}
+              };
+              options.body = JSON.stringify({'id': this.freet._id});
+              await fetch(`/api/reactions/like`, options);
+            }
+          }
+      });
+      
+    },
+    async dislike() {
+        const options = {
+          method: 'POST', headers: {'Content-Type': 'application/json'}
+        };
+        options.body = JSON.stringify({'id': this.freet._id});
+        await fetch(`/api/reactions/dislike`, options)
+          .then(async (response) => {
+          if (!response.ok) {
+            if (this.$store.username !== null) {
+              const options = {
+                method: 'DELETE', headers: {'Content-Type': 'application/json'}
+              };
+              options.body = JSON.stringify({'id': this.freet._id});
+              await fetch(`/api/reactions/dislike`, options);
+            }
+          }
+      });
     }
   }
 };

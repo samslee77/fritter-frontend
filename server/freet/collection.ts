@@ -25,7 +25,11 @@ class FreetCollection {
       authorId,
       dateCreated: date,
       content,
-      dateModified: date
+      dateModified: date,
+      ageRestrictedViewing: false,
+      likes: 0,
+      dislikes: 0,
+      consensusfiltered: false
     });
     await freet.save(); // Saves freet to MongoDB
     return freet.populate('authorId');
@@ -42,40 +46,59 @@ class FreetCollection {
   }
 
   /**
-   * Get all the freets in the database
+   * Get all the freets in the database that the user is allowed to see (if the user is of age, then they can view all freets, but if they are under age, then they can only
+   * see non age-restricted freets and age-restricted freets that only they made).
    *
    * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
    */
-  static async findAll(): Promise<Array<HydratedDocument<Freet>>> {
+  static async findAll(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Freet>>> {
     // Retrieves freets and sorts them from most to least recent
-    return FreetModel.find({}).sort({dateModified: -1}).populate('authorId');
+    const loggedInUser = await UserCollection.findOneByUserId(userId);
+    let ret;
+    if (loggedInUser && loggedInUser.age !== 'unknown' && parseInt(loggedInUser.age, 10) >= 18) {
+      ret = FreetModel.find({consensusfiltered: false}).sort({dateModified: -1}).populate('authorId');
+    } else {
+      ret = FreetModel.find({$or: [{ageRestrictedViewing: false, consensusfiltered: false}, {authorId: userId, consensusfiltered: false}]}).sort({dateModified: -1}).populate('authorId');
+    }
+
+    return ret;
   }
 
   /**
-   * Get all the freets in by given author
+   * Get all the freets in by the given author that the user is allowed to see (if the user is of age, then they can view all freets, but if they are under age, then they can only
+   * see non age-restricted freets).
    *
    * @param {string} username - The username of author of the freets
    * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
    */
-  static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Freet>>> {
+  static async findAllByUsername(username: string, userId: Types.ObjectId | string): Promise<Array<HydratedDocument<Freet>>> {
     const author = await UserCollection.findOneByUsername(username);
-    return FreetModel.find({authorId: author._id}).sort({dateModified: -1}).populate('authorId');
+
+    const loggedInUser = await UserCollection.findOneByUserId(userId);
+    let ret;
+    if (loggedInUser && loggedInUser.age !== 'unknown' && parseInt(loggedInUser.age, 10) >= 18) {
+      ret = FreetModel.find({authorId: author._id, consensusfiltered: false}).sort({dateModified: -1}).populate('authorId');
+    } else {
+      ret = FreetModel.find({authorId: author._id, ageRestrictedViewing: false, consensusfiltered: false}).sort({dateModified: -1}).populate('authorId');
+    }
+
+    return ret;
   }
 
-  /**
-   * Update a freet with the new content
-   *
-   * @param {string} freetId - The id of the freet to be updated
-   * @param {string} content - The new content of the freet
-   * @return {Promise<HydratedDocument<Freet>>} - The newly updated freet
-   */
-  static async updateOne(freetId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Freet>> {
-    const freet = await FreetModel.findOne({_id: freetId});
-    freet.content = content;
-    freet.dateModified = new Date();
-    await freet.save();
-    return freet.populate('authorId');
-  }
+  // /**
+  //  * Update a freet with the new content
+  //  *
+  //  * @param {string} freetId - The id of the freet to be updated
+  //  * @param {string} content - The new content of the freet
+  //  * @return {Promise<HydratedDocument<Freet>>} - The newly updated freet
+  //  */
+  // static async updateOne(freetId: Types.ObjectId | string, content: string): Promise<HydratedDocument<Freet>> {
+  //   const freet = await FreetModel.findOne({_id: freetId});
+  //   freet.content = content;
+  //   freet.dateModified = new Date();
+  //   await freet.save();
+  //   return freet.populate('authorId');
+  // }
 
   /**
    * Delete a freet with given freetId.
@@ -95,6 +118,18 @@ class FreetCollection {
    */
   static async deleteMany(authorId: Types.ObjectId | string): Promise<void> {
     await FreetModel.deleteMany({authorId});
+  }
+
+  /**
+   * Make Freet Age Restricted
+   *
+   * @param {string} freetId - the id of the freet
+   */
+  static async ageRestrict(freetId: Types.ObjectId | string): Promise<HydratedDocument<Freet>> {
+    const freet = await FreetModel.findOne({_id: freetId});
+    freet.ageRestrictedViewing = true;
+    await freet.save();
+    return freet.populate('authorId');
   }
 }
 
