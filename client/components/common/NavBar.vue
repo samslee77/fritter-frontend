@@ -11,20 +11,26 @@
       </h1>
     </div>
     <div class="right">
+      <router-link to="/">
+        Home
+      </router-link>
       <router-link
-        v-if="$store.state.username && $store.state.verified" 
+        v-if="$store.state.username && $store.state.verified === 'true'" 
         to="/verified"
       >
         Verification
       </router-link>
       <router-link
-        v-else-if="$store.state.username && !$store.state.verified" 
+        v-else-if="$store.state.username && $store.state.verified === 'false'" 
         to="/verification"
       >
         Verification
       </router-link>
-      <router-link to="/">
-        Home
+      <router-link 
+        v-if="$store.state.username"
+        to="/follow"
+      >
+        Follow
       </router-link>
       <router-link
         v-if="$store.state.username"

@@ -4,6 +4,7 @@ import FreetsPage from './components/Freet/FreetsPage.vue';
 import AccountPage from './components/Account/AccountPage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
 import VerificationPage from './components/Verification/VerificationPage.vue';
+import FollowPage from './components/Follow/FollowPage.vue';
 import VerifiedPage from './components/Verification/VerifiedPage.vue';
 import NotFound from './NotFound.vue';
 
@@ -15,6 +16,7 @@ const routes = [
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '/verification', name: 'Verification', component: VerificationPage},
   {path: '/verified', name: 'Verified', component: VerifiedPage},
+  {path: '/follow', name: 'Follow', component: FollowPage},
   {path: '*', name: 'Not Found', component: NotFound}
 ];
 

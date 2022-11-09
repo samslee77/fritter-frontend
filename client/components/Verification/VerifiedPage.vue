@@ -5,9 +5,8 @@
   <main>
     <section>
       <header>
-        <h2>You are Verified! 🎉</h2>
+        <h2>You are Verified! ✅</h2>
       </header>
-      <VerifiedPageForm />
     </section>
   </main>
 </template>

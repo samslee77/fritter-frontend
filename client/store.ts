@@ -13,6 +13,8 @@ const store = new Vuex.Store({
     freets: [], // All freets created in the app
     username: null, // Username of the logged in user
     verified: false, //verificationStatus of logged in user
+    following: [],
+    followers: [],
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
   mutations: {
@@ -48,6 +50,12 @@ const store = new Vuex.Store({
        * @param freets - Freets to store
        */
       state.freets = freets;
+    },
+    updateFollowing(state, following) {
+      state.following = following;
+    },
+    updateFollowers(state, followers) {
+      state.followers = followers;
     },
     async refreshFreets(state) {
       /**

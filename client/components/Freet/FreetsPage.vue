@@ -4,7 +4,9 @@
   <main>
     <section v-if="$store.state.username">
       <header>
-        <h2>Welcome @{{ $store.state.username }}</h2>
+        <h2>
+          Welcome @{{ $store.state.username }}
+        </h2>
       </header>
       <CreateFreetForm />
     </section>
@@ -17,7 +19,7 @@
           <router-link to="/login">
             Sign in
           </router-link>
-          to create, edit, and delete freets.
+          to create and delete freets.
         </h3>
       </article>
     </section>

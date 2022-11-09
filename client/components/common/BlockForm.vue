@@ -94,18 +94,19 @@ export default {
           throw new Error(res.error);
         }
 
-        if (this.setUsername) {
+        if (this.setUsername || this.setStatus) {
           const text = await r.text();
           const res = text ? JSON.parse(text) : {user: null};
-          this.$store.commit('setUsername', res.user ? res.user.username : null);
-          this.$store.commit('setStatus', res.user ? res.user.verified : null);
+          if (this.setUsername) {
+            this.$store.commit('setUsername', res.user ? res.user.username : null);
+          }
+          if (this.setStatus) {
+            this.$store.commit('setStatus', res.user ? res.user.verified : null);
+          }
+          
         }
 
-        if (this.setStatus) {
-          const text = await r.text();
-          const res = text ? JSON.parse(text) : {user: null};
-          this.$store.commit('setStatus', res.user ? res.user.verified : null);
-        }
+        
         if (this.refreshFreets) {
           this.$store.commit('refreshFreets');
         }

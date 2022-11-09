@@ -14,26 +14,17 @@
         class="actions"
       >
         <button
-          v-if="editing"
-          @click="submitEdit"
+          v-if="freet.ageRestrictedViewing === 'false'"
+          @click="ageRestrict"
         >
-          ✅ Save changes
+          🔞 Age-Restrict
         </button>
-        <button
-          v-if="editing"
-          @click="stopEditing"
+
+        <div
+          v-if="freet.ageRestrictedViewing === 'true'"
         >
-          🚫 Discard changes
-        </button>
-        <button
-          v-if="!editing"
-          @click="startEditing"
-        >
-          ✏️ Edit
-        </button>
-        <button @click="deleteFreet">
-          🗑️ Delete
-        </button>
+          🔞 Age-Restricted
+        </div>
       </div>
     </header>
     <textarea
@@ -61,10 +52,8 @@
         <p>{{ alert }}</p>
       </article>
     </section>
-    <div id="like">
+    <div id="reactions">
       <button @click="like">👍 {{freet.likes}} </button>
-    </div>
-    <div id="dislike">
       <button @click="dislike">👎 {{freet.dislikes}} </button>
     </div>
   </article>
@@ -163,6 +152,24 @@ export default {
         this.$store.commit('refreshFreets');
 
         params.callback();
+      } catch (e) {
+        this.$set(this.alerts, e, 'error');
+        setTimeout(() => this.$delete(this.alerts, e), 3000);
+      }
+    },
+    async ageRestrict() {
+      const options = {
+        method: 'PUT', headers: {'Content-Type': 'application/json'}
+      };
+      
+      try {
+        const r = await fetch(`/api/freets/${this.freet._id}`, options);
+        if (!r.ok) {
+          const res = await r.json();
+          throw new Error(res.error);
+        }
+
+        this.$store.commit('refreshFreets');
       } catch (e) {
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
