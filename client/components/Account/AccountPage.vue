@@ -5,7 +5,14 @@
   <main>
     <section>
       <header>
-        <h2>Account settings for @{{ $store.state.username }}</h2>
+        <h2>
+          <section v-if="$store.state.verified === 'true'">
+            Account settings for @{{ $store.state.username }}✅
+          </section>
+          <section v-else>
+            Account settings for @{{ $store.state.username }}
+          </section>
+        </h2>
       </header>
       <ChangeUsernameForm />
       <ChangePasswordForm />

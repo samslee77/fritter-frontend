@@ -36,12 +36,14 @@ export default {
 
 body {
   height: 100vh;
+  background-color: #E1EBEE; 
   flex-direction: column;
   display: flex;
   padding: 0;
   margin: 0;
   font-size: 1.2em;
 }
+
 
 main {
   padding: 0 5em 5em;

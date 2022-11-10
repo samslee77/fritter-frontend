@@ -11,6 +11,7 @@ export default {
       url: '/api/verification',
       method: 'PUT',
       hasBody: true,
+      setStatus: true,
       fields: [
         {id: 'name', label: 'Name', value: ''},
         {id: 'age', label: 'Age', value: ''}

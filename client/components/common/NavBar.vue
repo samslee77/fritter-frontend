@@ -12,31 +12,31 @@
     </div>
     <div class="right">
       <router-link to="/">
-        Home
+        🏡Home
       </router-link>
       <router-link
         v-if="$store.state.username && $store.state.verified === 'true'" 
         to="/verified"
       >
-        Verification
+        ✔️Verification
       </router-link>
       <router-link
         v-else-if="$store.state.username && $store.state.verified === 'false'" 
         to="/verification"
       >
-        Verification
+        ✔️Verification
       </router-link>
       <router-link 
         v-if="$store.state.username"
         to="/follow"
       >
-        Follow
+        👉Follow
       </router-link>
       <router-link
         v-if="$store.state.username"
         to="/account"
       >
-        Account
+        👤Account
       </router-link>
       <router-link
         v-else
@@ -60,20 +60,21 @@
 <style scoped>
 nav {
     padding: 1vw 2vw;
-    background-color: #ccc;
+    background-color: #0096FF;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
+    box-shadow: 2px 2px 2px black;
 }
 
 .title {
-    font-size: 32px;
+    font-size: 45px;
     margin: 0 5px;
 }
 
 img {
-    height: 32px;
+    height: 50px;
 }
 
 .left {
@@ -82,14 +83,16 @@ img {
 }
 
 .right {
-    font-size: 20px;
-    display: grid;
-    gap: 16px;
+    font-size: 30px;
+    display: flex;
+    gap: 15px;
     grid-auto-flow: column;
     align-items: center;
+    color: white;
 }
 
 .right a {
+    text-decoration: None;
     margin-left: 5px;
 }
 

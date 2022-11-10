@@ -6,6 +6,9 @@
       <header>
         <h2>
           Welcome @{{ $store.state.username }}
+          <div v-if="$store.state.verified === 'true'">
+            ✅  
+          </div>
         </h2>
       </header>
       <CreateFreetForm />
@@ -27,7 +30,11 @@
       <header>
         <div class="left">
           <h2>
-            Viewing all freets
+            Viewing all freets!
+            <br>
+            Note that freets with more than 5 total reactions and have more dislikes than likes will be ConsensusFiltered.
+            <br>
+            You must also be an adult and be verified to view the age-restricted freets.
             <span v-if="$store.state.filter">
               by @{{ $store.state.filter }}
             </span>
@@ -95,4 +102,7 @@ section .scrollbox {
   padding: 3%;
   overflow-y: scroll;
 }
+
 </style>
+
+

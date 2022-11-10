@@ -27,7 +27,7 @@ router.post(
     originalFreet.likes += 1;
     const likes = originalFreet.likes;
     const dislikes = originalFreet.dislikes;
-    if ((likes + dislikes > 10) && dislikes / (likes + dislikes) > 0.8) {
+    if ((likes + dislikes > 5) && dislikes / (likes + dislikes) > 0.5) {
       originalFreet.consensusfiltered = true;
     }
 
@@ -58,7 +58,7 @@ router.post(
     originalFreet.dislikes += 1;
     const likes = originalFreet.likes;
     const dislikes = originalFreet.dislikes;
-    if ((likes + dislikes > 10) && dislikes / (likes + dislikes) > 0.8) {
+    if ((likes + dislikes > 5) && dislikes / (likes + dislikes) > 0.5) {
       originalFreet.consensusfiltered = true;
     }
 
@@ -89,7 +89,7 @@ router.delete(
     originalFreet.likes -= 1;
     const likes = originalFreet.likes;
     const dislikes = originalFreet.dislikes;
-    if ((likes + dislikes > 10) && dislikes / (likes + dislikes) > 0.8) {
+    if ((likes + dislikes > 5) && dislikes / (likes + dislikes) > 0.5) {
       originalFreet.consensusfiltered = true;
     } else {
       originalFreet.consensusfiltered = false;
@@ -121,7 +121,7 @@ router.delete(
     originalFreet.dislikes -= 1;
     const likes = originalFreet.likes;
     const dislikes = originalFreet.dislikes;
-    if ((likes + dislikes > 10) && dislikes / (likes + dislikes) > 0.8) {
+    if ((likes + dislikes > 5) && dislikes / (likes + dislikes) > 0.5) {
       originalFreet.consensusfiltered = true;
     } else {
       originalFreet.consensusfiltered = false;

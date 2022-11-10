@@ -10,4 +10,10 @@
     </section>
   </main>
 </template>
+<style scoped>
+header {
+  text-align: center;
+  font-size: 40px;
+}
+</style>
 

@@ -28,7 +28,9 @@
       </div>
     </article>
     <article v-else>
-      <p>{{ content }}</p>
+      <h4>
+        <p>{{ content }}</p>
+      </h4>
     </article>
     <button
       type="submit"
@@ -125,13 +127,17 @@ export default {
 
 <style scoped>
 form {
-  border: 1px solid #111;
-  padding: 0.5rem;
+  border: 3px solid #111;
+  border-radius: 20px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-bottom: 14px;
   position: relative;
+  font-size: 25px;
+  box-shadow: 3px 3px 3px gray;
+  background-color: #87cefa ;
 }
 
 article > div {
@@ -140,20 +146,30 @@ article > div {
 }
 
 form > article p {
-  margin: 0;
+  margin: 0.1;
 }
 
 form h3,
 form > * {
-  margin: 0.3em 0;
+  margin: 0.2em 0;
+  border-radius:10px;
+  font-size: 25px;
 }
 
 form h3 {
   margin-top: 0;
+  border-radius:10px;
+}
+
+h4 {
+  padding: 1px 8px;
+  border-radius: 10px;
+  background-color: #D3D3D3;
 }
 
 textarea {
    font-family: inherit;
    font-size: inherit;
+   border-radius: 10px;
 }
 </style>

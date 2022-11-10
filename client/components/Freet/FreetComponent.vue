@@ -8,24 +8,10 @@
     <header>
       <h3 class="author">
         @{{ freet.author }}
-      </h3>
-      <div
-        v-if="$store.state.username === freet.author"
-        class="actions"
-      >
-        <button
-          v-if="freet.ageRestrictedViewing === 'false'"
-          @click="ageRestrict"
-        >
-          🔞 Age-Restrict
-        </button>
-
-        <div
-          v-if="freet.ageRestrictedViewing === 'true'"
-        >
-          🔞 Age-Restricted
+        <div v-if="freet.author.verified === 'false'">
+          ✅
         </div>
-      </div>
+      </h3>
     </header>
     <textarea
       v-if="editing"
@@ -39,8 +25,9 @@
     >
       {{ freet.content }}
     </p>
+    <hr>
     <p class="info">
-      Posted at {{ freet.dateModified }}
+      Posted on {{ freet.dateModified }}
       <i v-if="freet.edited">(edited)</i>
     </p>
     <section class="alerts">
@@ -55,6 +42,26 @@
     <div id="reactions">
       <button @click="like">👍 {{freet.likes}} </button>
       <button @click="dislike">👎 {{freet.dislikes}} </button>
+    </div>
+    <div
+      v-if="$store.state.username === freet.author"
+      class="actions"
+    >
+      <button @click="deleteFreet">
+        🗑️ Delete
+      </button>
+      <button
+        v-if="freet.ageRestrictedViewing === 'false'"
+        @click="ageRestrict"
+      >
+        🔞 Age-Restrict
+      </button>
+      <div
+        v-if="freet.ageRestrictedViewing === 'true'"
+      >
+        🔞 Age-Restricted
+      </div>
+      
     </div>
   </article>
 </template>
@@ -77,20 +84,6 @@ export default {
     };
   },
   methods: {
-    startEditing() {
-      /**
-       * Enables edit mode on this freet.
-       */
-      this.editing = true; // Keeps track of if a freet is being edited
-      this.draft = this.freet.content; // The content of our current "draft" while being edited
-    },
-    stopEditing() {
-      /**
-       * Disables edit mode on this freet.
-       */
-      this.editing = false;
-      this.draft = this.freet.content;
-    },
     deleteFreet() {
       /**
        * Deletes this freet.
@@ -101,28 +94,6 @@ export default {
           this.$store.commit('alert', {
             message: 'Successfully deleted freet!', status: 'success'
           });
-        }
-      };
-      this.request(params);
-    },
-    submitEdit() {
-      /**
-       * Updates freet to have the submitted draft content.
-       */
-      if (this.freet.content === this.draft) {
-        const error = 'Error: Edited freet content should be different than current freet content.';
-        this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
-        setTimeout(() => this.$delete(this.alerts, error), 3000);
-        return;
-      }
-
-      const params = {
-        method: 'PATCH',
-        message: 'Successfully edited freet!',
-        body: JSON.stringify({content: this.draft}),
-        callback: () => {
-          this.$set(this.alerts, params.message, 'success');
-          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         }
       };
       this.request(params);
@@ -192,7 +163,7 @@ export default {
             }
           }
       });
-      
+      this.$store.commit('refreshFreets');
     },
     async dislike() {
         const options = {
@@ -210,6 +181,7 @@ export default {
               await fetch(`/api/reactions/dislike`, options);
             }
           }
+        this.$store.commit('refreshFreets');
       });
     }
   }
@@ -218,8 +190,45 @@ export default {
 
 <style scoped>
 .freet {
-    border: 1px solid #111;
-    padding: 20px;
+    border: 5px solid #111;
+    padding: 15px;
     position: relative;
+    font-size: 25px;
+    border-radius: 25px;
+    box-shadow: 3px 3px 3px gray;
+    margin-bottom: 50px;
+    background-color: #87cefa;
+}
+
+.reactions {
+  position: center;
+}
+
+
+.content {
+  border: 0.5px solid #111;
+  padding: 30px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+h3 {
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 25px;
+  background-color: #E6E6FA;
+  border-radius: 30px;
+}
+
+button {
+  padding: 7px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 22px;
+  background-color: #C8C8C8;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px black;
 }
 </style>
